@@ -1,6 +1,6 @@
 <template>
 	<view class="container">
-		<headder></headder>
+		<headder @showMore="showMore"></headder>
 		<view class="headder-day">
 			<view class="date">
 				<text>{{ date }}</text>
@@ -11,56 +11,12 @@
 				<text class="text">周{{ day }}</text>
 			</view>
 		</view>
-		<view class="article-container">
-			<view class="month"><text>二零二二年 六月</text></view>
-			<view class="article-innercontainer">
-				<view class="article">
-					<view class="time">
-						<view class="date">16</view>
-						<view class="day">周一</view>
-						<view class="miniute">11:50</view>
-					</view>
-					<view class="line"></view>
-					<view class="content"><text>摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了</text></view>
-				</view>
-			</view>
-			<view class="month"><text>二零二二年 六月</text></view>
-			<view class="article-innercontainer">
-				<view class="article">
-					<view class="time">
-						<view class="date">16</view>
-						<view class="day">周一</view>
-						<view class="miniute">11:50</view>
-					</view>
-					<view class="line"></view>
-					<view class="content"><text>摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了</text></view>
-				</view>
-			</view>
-			<view class="blank"></view>
-			<view class="article-innercontainer">
-				<view class="article">
-					<view class="time">
-						<view class="date">16</view>
-						<view class="day">周一</view>
-						<view class="miniute">11:50</view>
-					</view>
-					<view class="line"></view>
-					<view class="content"><text>摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了</text></view>
-				</view>
-			</view>
-			<view class="month"><text>二零二二年 六月</text></view>
-			<view class="article-innercontainer">
-				<view class="article">
-					<view class="time">
-						<view class="date">16</view>
-						<view class="day">周一</view>
-						<view class="miniute">11:50</view>
-					</view>
-					<view class="line"></view>
-					<view class="content"><text>摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了</text></view>
-				</view>
-			</view>
-		</view>
+		<articles :articles="articles"></articles>
+		<uni-drawer ref="showLeft" mode="left" :mask-click="true" >
+			<scroll-view style="height: 100%;" scroll-y="true">
+				<drawer></drawer>
+			</scroll-view>
+		</uni-drawer>
 	</view>
 </template>
 
@@ -71,10 +27,51 @@ export default {
 		return {
 			date: '',
 			month: '',
-			day: ''
+			day: '',
+			articles: [
+				{
+					createAt: 'Sat Jun 18 2022 16:24:18 GMT+0800 (中国标准时间)',
+					content: '摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了',
+					labels: ['摸了']
+				},
+				{
+					createAt: 'Sat Jun 18 2022 16:24:18 GMT+0800 (中国标准时间)',
+					content: '摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了',
+					labels: ['摸了']
+				},
+				{
+					createAt: 'Sat Jun 18 2022 16:24:18 GMT+0800 (中国标准时间)',
+					content: '摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了',
+					labels: ['摸了']
+				},
+				{
+					createAt: 'Sat Jun 15 2022 16:24:18 GMT+0800 (中国标准时间)',
+					content: '摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了',
+					labels: ['摸了']
+				},
+				{
+					createAt: 'Sat July 15 2022 16:24:18 GMT+0800 (中国标准时间)',
+					content: '摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了',
+					labels: ['摸了']
+				},
+				{
+					createAt: 'Sat Jun 15 2022 16:24:18 GMT+0800 (中国标准时间)',
+					content: '摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了',
+					labels: ['摸了']
+				},
+				{
+					createAt: 'Sat July 15 2022 16:24:18 GMT+0800 (中国标准时间)',
+					content: '摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了',
+					labels: ['摸了']
+				}
+			]
 		};
 	},
-	methods: {},
+	methods: {
+		showMore() {
+			this.$refs.showLeft.open()
+		}
+	},
 	onLoad() {
 		const date = new Date();
 		this.date = date.getDate();
@@ -92,7 +89,7 @@ export default {
 	.line {
 		width: 1rpx;
 		display: inline;
-		border-left:1px solid #c7c9ce
+		border-left: 1px solid #c7c9ce;
 	}
 	.headder-day {
 		background-color: white;
@@ -108,46 +105,6 @@ export default {
 		}
 		.text {
 			margin: 15rpx;
-		}
-	}
-	.article-container {
-		.month {
-			padding-top: 8px;
-			padding-bottom: 5px;
-			text-align: center;
-			font-size: 10px;
-			color: #8f939c;
-		}
-		.article-innercontainer {
-			background-color: white;
-			padding: 30rpx 30rpx 30rpx 45rpx;
-			.article {
-				display: flex;
-				.time {
-					text-align: center;
-					padding-right: 30rpx;
-					.date {
-						font-size: 50rpx;
-					}
-					.day {
-						font-size: 25rpx;
-					}
-					.miniute {
-						font-size: 25rpx;
-						color: #8f939c;
-					}
-				}
-				.content {
-					padding: 8rpx 10rpx 0 30rpx;
-					width: 400rpx;
-					font-size: 30rpx;
-					display: flex;
-					flex-wrap: wrap;
-				}
-			}
-		}
-		.blank {
-			height: 10rpx;
 		}
 	}
 }

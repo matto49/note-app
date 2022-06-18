@@ -1,5 +1,5 @@
 <template>
-	<view class="container" :style="{height: height}"> 
+	<view class="container" :style="{ height: height }">
 		<editor
 			class="ql-container"
 			:placeholder="placeholder"
@@ -9,12 +9,12 @@
 			@ready="onEditorReady"
 			id="editor"
 			@statuschange="statuschange"
-			@focus="editFocus" 
+			@focus="editFocus"
 			@blur="editBlur"
 			ref="editot"
-		></editor>   
+		></editor>
 		<!-- 操作工具 -->
-		<view class="tool-view" > 
+		<view class="tool-view">
 			<!-- 文字相关操作 -->
 			<view class="font-more" :style="{ height: showMoreTool ? '100rpx' : 0 }">
 				<jinIcon class="single" type="&#xe6e7;" font-size="44rpx" title="加粗" @click="setBold" :color="showBold ? activeColor : '#666666'"></jinIcon>
@@ -25,16 +25,16 @@
 				<jinIcon class="single" type="&#xe6ed;" font-size="44rpx" title="居右" @click="setRight" :color="showRight ? activeColor : '#666666'"></jinIcon>
 			</view>
 			<view class="setting-layer-mask" v-if="showSettingLayer" @click="showSetting"></view>
-			<view class="setting-layer" v-if="showSettingLayer">
+<!-- 			<view class="setting-layer" v-if="showSettingLayer">
 				<view class="single" @click="release(true)">
-					<jinIcon class="icon" type="&#xe639;" ></jinIcon>
+					<jinIcon class="icon" type="&#xe639;"></jinIcon>
 					<view>公开发布</view>
 				</view>
 				<view class="single" @click="release(false)">
-					<jinIcon class="icon" type="&#xe655;" ></jinIcon>
+					<jinIcon class="icon" type="&#xe655;"></jinIcon>
 					<view>暂时保存</view>
 				</view>
-			</view>
+			</view> -->
 			<view class="tool">
 				<jinIcon class="single" type="&#xe6f3;" font-size="44rpx" title="插入图片" @click="insertImage"></jinIcon>
 				<jinIcon class="single" type="&#xe6f9;" font-size="44rpx" title="修改文字样式" @click="showMore" :color="showMoreTool ? activeColor : '#666666'"></jinIcon>
@@ -95,9 +95,7 @@ export default {
 			default: '100vh'
 		}
 	},
-	computed:{
-		
-	},
+	computed: {},
 	data() {
 		return {
 			showMoreTool: false,
@@ -114,22 +112,24 @@ export default {
 	components: {
 		jinIcon
 	},
-	mounted() {
-	},
+	mounted() {},
 	methods: {
 		onEditorReady(e) {
 			uni.createSelectorQuery()
 				.in(this)
 				.select('.ql-container')
-				.fields({
-					size: true,
-					context: true
-				},res => {
-					this.editorCtx = res.context;
-					this.editorCtx.setContents({
-						html: this.html
-					})
-				})
+				.fields(
+					{
+						size: true,
+						context: true
+					},
+					res => {
+						this.editorCtx = res.context;
+						this.editorCtx.setContents({
+							html: this.html
+						});
+					}
+				)
 				.exec();
 		},
 		undo() {
@@ -141,11 +141,11 @@ export default {
 				count: 9, //默认9
 				sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
 				sourceType: ['album', 'camera'], //从相册选择
-				success: async(res) => {
+				success: async res => {
 					var tempFilePaths = res.tempFilePaths;
 					uni.showLoading({
 						title: '正在上传中...'
-					})
+					});
 					for (let temp of tempFilePaths) {
 						console.log(88, temp);
 						// 图片上传服务器
@@ -157,12 +157,12 @@ export default {
 							success: res => {
 								// 上传完成后处理
 								this.editorCtx.insertImage({
-									src: temp,  // 此处需要将图片地址切换成服务器返回的真实图片地址
+									src: temp, // 此处需要将图片地址切换成服务器返回的真实图片地址
 									alt: '图片',
 									success: function(e) {}
 								});
-								uni.hideLoading()
-							},
+								uni.hideLoading();
+							}
 						});
 					}
 				}
@@ -177,7 +177,7 @@ export default {
 		},
 		showMore() {
 			this.showMoreTool = !this.showMoreTool;
-			this.editorCtx.setContents()
+			this.editorCtx.setContents();
 		},
 		setBold() {
 			this.showBold = !this.showBold;
@@ -235,50 +235,49 @@ export default {
 		showSetting() {
 			this.showSettingLayer = !this.showSettingLayer;
 		},
-		async editFocus(e) {
-		},
-		editBlur(e) {
-		},
+		async editFocus(e) {},
+		editBlur(e) {},
 		release(isPublic) {
 			this.showSettingLayer = false;
 			this.editorCtx.getContents({
 				success: res => {
 					Object.assign(res, {
 						isPublic: isPublic
-					})
+					});
 					this.$emit('editOk', res);
-				} 
-			})
-		},
+				}
+			});
+		}
 	}
 };
 </script>
 
 <style scoped>
 .container {
+	background: #fff;
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
 	height: 100%;
 	box-sizing: border-box;
+	padding-top: calc(var(--status-bar-height) + 30px);
 	/* padding-top: 30rpx; */
 }
 
 .ql-container {
 	line-height: 150%;
 	font-size: 34rpx;
-	width: 100%; 
-	background: #fff;
+	width: 100%;
 	width: calc(100% - 60rpx);
 	margin: 0 auto;
 	flex: 1;
 	box-sizing: border-box;
 	margin-top: 30rpx;
 	/* padding-bottom: 5rpx; */
-} 
-.tool-view{
+}
+.tool-view {
 	width: 100vw;
-	background: #eee;
+	background: #fff;
 	/* margin-top: 20px; */
 }
 .tool {
@@ -321,12 +320,12 @@ export default {
 .setting-layer .single .icon {
 	margin-right: 20rpx;
 }
-.setting-layer-mask{
+.setting-layer-mask {
 	position: fixed;
 	left: 0;
 	top: 0;
 	width: 100vw;
 	height: 100vh;
-	background: transparent; 
+	background: transparent;
 }
 </style>

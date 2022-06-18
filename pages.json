@@ -4,15 +4,39 @@
 		"style": {
 			"navigationBarTitleText": "uni-app"
 		}
+	}, {
+		"path": "pages/write/write",
+		"style": {
+			"navigationBarTitleText": "",
+			"enablePullDownRefresh": false,
+			"app-plus": {
+				"softinputMode": "adjustResize"
+			}
+		}
+
+	}, {
+		"path": "pages/search/search",
+		"style": {
+			"navigationBarTitleText": "",
+			"enablePullDownRefresh": false,
+			"background": "#fff"
+		}
+
 	}    ,{
-            "path" : "pages/write/write",
+            "path" : "pages/calendar/calendar",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",
-                "enablePullDownRefresh": false,
-				"app-plus": {
-					"softinputMode": "adjustResize"
-				}
+                "enablePullDownRefresh": false
+            }
+            
+        }
+        ,{
+            "path" : "pages/tag/tag",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
             }
             
         }

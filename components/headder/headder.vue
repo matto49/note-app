@@ -2,7 +2,7 @@
 	<view class="headder">
 		<view class="top-view status"></view>
 		<view class="titles">
-			<view class="titleLeftButton" @click=""><image class="button" src="/static/more.svg"></image></view>
+			<view class="titleLeftButton" @click="showMore"><image class="button" src="/static/more.svg"></image></view>
 			<view class="titleText">二零二二年 五月</view>
 			<view class="titleRightButton" @click="gotoWritePage"><image class="button" src="/static/write.svg"></image></view>
 		</view>
@@ -21,6 +21,9 @@ export default {
 			uni.navigateTo({
 				url: '/pages/write/write'
 			})
+		},
+		showMore() {
+			this.$emit("showMore");
 		}
 	}
 };
@@ -31,6 +34,7 @@ export default {
 	width: 100%;
 	position: fixed;
 	background-color: white;
+	padding-bottom: 20px;
 	.status {
 		height: var(--status-bar-height);
 	}
