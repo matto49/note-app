@@ -1,0 +1,85 @@
+@font-face {
+  font-family: "iconfont"; /* Project id  */
+  src: url('~@/static/ico/iconfont.ttf') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-duihao:before {
+  content: "\e60b";
+}
+
+.icon-jiacu:before {
+  content: "\e608";
+}
+
+.icon-liebiao5:before {
+  content: "\e648";
+}
+
+.icon-huoche:before {
+  content: "\e60c";
+}
+
+.icon-juzhong:before {
+  content: "\e7db";
+}
+
+.icon-strikethrough:before {
+  content: "\e7f9";
+}
+
+.icon-chexiao:before {
+  content: "\eaf0";
+}
+
+.icon-huoche_zhuangche_o:before {
+  content: "\ebbf";
+}
+
+.icon-juzuoduiqi:before {
+  content: "\eb27";
+}
+
+.icon-juyouduiqi:before {
+  content: "\eb28";
+}
+
+.icon-huoche1:before {
+  content: "\e990";
+}
+
+.icon-24gl-ol:before {
+  content: "\eb08";
+}
+
+.icon-24gf-ul:before {
+  content: "\eb13";
+}
+
+.icon-icon-test:before {
+  content: "\e700";
+}
+
+.icon-ziyuan:before {
+  content: "\e611";
+}
+
+.icon-truck:before {
+  content: "\e9d9";
+}
+
+.icon-title:before {
+  content: "\e61d";
+}
+
+.icon-bianji-qingxie:before {
+  content: "\e687";
+}
+
