@@ -3,7 +3,7 @@
 		<view class="headder">
 			<view class="top-view status"></view>
 			<view class="titles">
-				<view class="titleLeftButton" @click=""><image class="button" src="/static/left-arrow.svg"></image></view>
+				<view class="titleLeftButton" @click="returnToIndex"><image class="button" src="/static/left-arrow.svg"></image></view>
 				<view class="titleText">二零二二年 五月</view>
 				<view class="titleRightButton" @click=""><image class="button" src="/static/note.svg"></image></view>
 			</view>
@@ -22,8 +22,11 @@ export default {
 	},
 	methods: {
 		// 点击发布
-		editOk(res) {
-			console.log(res);
+		editOk(e) {
+			console.log(e);
+		},
+		returnToIndex() {
+			uni.navigateBack()
 		}
 	}
 };

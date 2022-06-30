@@ -3,7 +3,7 @@
 		<view class="headder">
 			<view class="top-view status"></view>
 			<view class="titles">
-				<view class="titleLeftButton" @click=""><image class="button" src="/static/left-arrow.svg"></image></view>
+				<view class="titleLeftButton" @click="returnToIndex"><image class="button" src="/static/left-arrow.svg"></image></view>
 				<view class="titleText">账号设置</view>
 			</view>
 		</view>
@@ -13,7 +13,7 @@
 		</view>
 		<view class="items-container">
 			<view class="item-container">
-				<text  style="color: #8f939c;">昵称</text>
+				<text style="color: #8f939c;">昵称</text>
 				<text>matto</text>
 			</view>
 			<view class="item-container">
@@ -23,7 +23,7 @@
 		</view>
 		<view class="items-container">
 			<view class="item-container">
-				<text  style="color: #8f939c;">邮箱</text>
+				<text style="color: #8f939c;">邮箱</text>
 				<text>未绑定</text>
 			</view>
 			<view class="item-container">
@@ -31,7 +31,7 @@
 				<text>未绑定</text>
 			</view>
 			<view class="item-container">
-				<text  style="color: #8f939c;">微信</text>
+				<text style="color: #8f939c;">微信</text>
 				<text>未绑定</text>
 			</view>
 			<view class="item-container">
@@ -41,11 +41,11 @@
 		</view>
 		<view class="items-container">
 			<view class="item-container">
-				<text  style="color: #8f939c;">修改密码</text>
+				<text style="color: #8f939c;">修改密码</text>
 				<image src="/static/right-arrow.svg" class="icon"></image>
 			</view>
 			<view class="item-container">
-				<text  style="color: #8f939c;">注销账户</text>
+				<text style="color: #8f939c;">注销账户</text>
 				<image src="/static/right-arrow.svg" class="icon"></image>
 			</view>
 		</view>
@@ -56,6 +56,11 @@
 export default {
 	data() {
 		return {};
+	},
+	methods: {
+		returnToIndex() {
+			uni.navigateBack();
+		}
 	}
 };
 </script>
