@@ -12,64 +12,27 @@
 			</view>
 		</view>
 		<articles :articles="articles"></articles>
-		<uni-drawer ref="showLeft" mode="left" :mask-click="true" >
-			<scroll-view style="height: 100%;" scroll-y="true">
-				<drawer></drawer>
-			</scroll-view>
+		<uni-drawer ref="showLeft" mode="left" :mask-click="true">
+			<scroll-view style="height: 100%;" scroll-y="true"><drawer></drawer></scroll-view>
 		</uni-drawer>
 	</view>
 </template>
 
 <script>
 const chineseNum = ['一', '二', '三', '四', '五', '六', '七', '八', '九'];
+import { openDatabase, isOpen, closeDatabase, getArticles,modifyData } from '@/utils';
 export default {
 	data() {
 		return {
 			date: '',
 			month: '',
 			day: '',
-			articles: [
-				{
-					createAt: 'Sat Jun 18 2022 16:24:18 GMT+0800 (中国标准时间)',
-					content: '摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了',
-					labels: ['摸了']
-				},
-				{
-					createAt: 'Sat Jun 18 2022 16:24:18 GMT+0800 (中国标准时间)',
-					content: '摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了',
-					labels: ['摸了']
-				},
-				{
-					createAt: 'Sat Jun 18 2022 16:24:18 GMT+0800 (中国标准时间)',
-					content: '摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了',
-					labels: ['摸了']
-				},
-				{
-					createAt: 'Sat Jun 15 2022 16:24:18 GMT+0800 (中国标准时间)',
-					content: '摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了',
-					labels: ['摸了']
-				},
-				{
-					createAt: 'Sat July 15 2022 16:24:18 GMT+0800 (中国标准时间)',
-					content: '摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了',
-					labels: ['摸了']
-				},
-				{
-					createAt: 'Sat Jun 15 2022 16:24:18 GMT+0800 (中国标准时间)',
-					content: '摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了',
-					labels: ['摸了']
-				},
-				{
-					createAt: 'Sat July 15 2022 16:24:18 GMT+0800 (中国标准时间)',
-					content: '摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了摸了摸了摸了睡了',
-					labels: ['摸了']
-				}
-			]
+			articles: []
 		};
 	},
 	methods: {
 		showMore() {
-			this.$refs.showLeft.open()
+			this.$refs.showLeft.open();
 		}
 	},
 	onLoad() {
@@ -77,6 +40,17 @@ export default {
 		this.date = date.getDate();
 		this.month = chineseNum[date.getMonth()];
 		this.day = chineseNum[date.getDay() - 1];
+
+	},
+	async onShow() {
+		await openDatabase();
+		const data = await getArticles();
+		await closeDatabase();
+		this.articles = modifyData(data);
+		console.log(1123)
+		uni.navigateTo({
+			url:"/pages/enter/enter"
+		})
 	}
 };
 </script>

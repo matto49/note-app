@@ -4,29 +4,62 @@
 			<view class="top-view status"></view>
 			<view class="titles">
 				<view class="titleLeftButton" @click="returnToIndex"><image class="button" src="/static/left-arrow.svg"></image></view>
-				<view class="titleText">二零二二年 五月</view>
+				<view class="titleText">{{ date }}</view>
 				<view class="titleRightButton" @click=""><image class="button" src="/static/note.svg"></image></view>
 			</view>
 		</view>
-		<jinEdit placeholder="请输入内容" @editOk="editOk" uploadFileUrl="/#"></jinEdit>
+		<jinEdit class="edit" placeholder="请输入内容" @editOk="editOk" uploadFileUrl="/#" :html="editData.content"></jinEdit>
 	</view>
 </template>
 <script>
 import jinEdit from '../../components/jin-edit/jin-edit.vue';
+import { openDatabase, isOpen, closeDatabase, addArticle, editArticle,getStandardDate,addNote } from '@/utils';
+let isEdit = false;
 export default {
 	data() {
-		return {};
+		return {
+			html: '',
+			date: '',
+			editData: {},
+			tags: ["未分类"]
+		};
 	},
 	components: {
 		jinEdit
 	},
 	methods: {
 		// 点击发布
-		editOk(e) {
-			console.log(e);
+		async editOk(e) {
+			await openDatabase();
+			if(!isEdit) {
+				this.tags.forEach(async (item) => {
+					await addArticle(e.html, this.date, e.text,item);
+					await addNote(this.date,e.text,e.html,item);
+				})
+			} else {
+				this.tags.forEach((item) => {
+					console.log(113)
+					// await editArticle(e.html,e.text,item)
+					// await addNote(this.date,e.text,e.html,item)
+				})
+			}
+			await closeDatabase();
+			this.returnToIndex();
 		},
 		returnToIndex() {
-			uni.navigateBack()
+			uni.navigateTo({
+				url:'/pages/index/index'
+			})();
+		}
+	},
+	onLoad(e) {
+		if (e.data) {
+			const data = JSON.parse(e.data);
+			this.editData = data;
+			this.date = getStandardDate(new Date(data.createAt));
+			isEdit = true;
+		} else {
+			this.date = getStandardDate(new Date());
 		}
 	}
 };
@@ -49,16 +82,20 @@ export default {
 			height: 50rpx;
 			width: 50rpx;
 		}
-		.titleLeftButton{
+		.titleLeftButton {
 			padding-top: 7px;
 			padding-left: 20rpx;
 		}
-		.titleRightButton{
+		.titleRightButton {
 			padding-top: 10px;
 		}
 		.titleText {
 			align-self: center;
 		}
 	}
+}
+.edit {
+	padding-top: 80px;
+	padding-left: 20rpx;
 }
 </style>
