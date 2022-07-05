@@ -13,7 +13,6 @@
 				"softinputMode": "adjustResize"
 			}
 		}
-
 	}, {
 		"path": "pages/search/search",
 		"style": {
@@ -69,6 +68,18 @@
         }
         ,{
             "path" : "pages/register/register",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false,
+				"app-plus": {
+					"softinputMode": "adjustPan"
+				}
+            }
+            
+        }
+        ,{
+            "path" : "pages/login/login",
             "style" :                                                                                    
             {
                 "navigationBarTitleText": "",

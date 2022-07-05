@@ -137,36 +137,36 @@ export default {
 		},
 		// 插入图片
 		insertImage() {
-			uni.chooseImage({
-				count: 9, //默认9
-				sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
-				sourceType: ['album', 'camera'], //从相册选择
-				success: async res => {
-					var tempFilePaths = res.tempFilePaths;
-					uni.showLoading({
-						title: '正在上传中...'
-					});
-					for (let temp of tempFilePaths) {
-						console.log(88, temp);
-						// 图片上传服务器
-						await uni.uploadFile({
-							url: this.uploadFileUrl,
-							filePath: temp,
-							name: this.fileKeyName,
-							header: this.header,
-							success: res => {
-								// 上传完成后处理
-								this.editorCtx.insertImage({
-									src: temp, // 此处需要将图片地址切换成服务器返回的真实图片地址
-									alt: '图片',
-									success: function(e) {}
-								});
-								uni.hideLoading();
-							}
-						});
-					}
-				}
-			});
+			// uni.chooseImage({
+			// 	count: 9, //默认9
+			// 	sizeType: ['original', 'compressed'], //可以指定是原图还是压缩图，默认二者都有
+			// 	sourceType: ['album', 'camera'], //从相册选择
+			// 	success: async res => {
+			// 		var tempFilePaths = res.tempFilePaths;
+			// 		uni.showLoading({
+			// 			title: '正在上传中...'
+			// 		});
+			// 		for (let temp of tempFilePaths) {
+			// 			console.log(88, temp);
+			// 			// 图片上传服务器
+			// 			await uni.uploadFile({
+			// 				url: this.uploadFileUrl,
+			// 				filePath: temp,
+			// 				name: this.fileKeyName,
+			// 				header: this.header,
+			// 				success: res => {
+			// 					// 上传完成后处理
+			// 					this.editorCtx.insertImage({
+			// 						src: temp, // 此处需要将图片地址切换成服务器返回的真实图片地址
+			// 						alt: '图片',
+			// 						success: function(e) {}
+			// 					});
+			// 					uni.hideLoading();
+			// 				}
+			// 			});
+			// 		}
+			// 	}
+			// });
 		},
 		/// 插入分割线
 		insertDivider() {

@@ -2,7 +2,7 @@
     "name" : "note-app",
     "appid" : "__UNI__440EF81",
     "description" : "note笔记",
-    "versionName" : "1.0.0",
+    "versionName" : "1.1.0",
     "versionCode" : "100",
     "transformPx" : false,
     "app-plus" : {

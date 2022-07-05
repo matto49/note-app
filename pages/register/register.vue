@@ -1,11 +1,27 @@
 <template>
 	<view class="">
-		  <view class="title">{{123}}</view>
-		  <input type="text" class="global-input email-input" placeholder="输入学号" placeholder-class="input-placeholder" :value="email" style="margin-top: 42px" bindinput="inputEmail" maxlength="30">
-		  </input>
-		  <button class="email-send-btn" hover-class="hover-first-main-button" bindtap="verifyEmail">获取验证码
-		  </button>
-		<navigator class="nav-log-account blue-font" url="/pages/log-account/log-account">已经注册?</navigator>
+		<view class="title">注册</view>
+		<input type="text" class="global-input email-input" placeholder="输入邮箱" placeholder-class="input-placeholder" style="margin-top: 30px" maxlength="30" v-model="email" />
+		<input
+			type="text"
+			class="global-input email-input"
+			placeholder="输入名称"
+			placeholder-class="input-placeholder"
+			style="margin-top: 30px"
+			maxlength="30"
+			v-model="nickname"
+		/>
+		<input
+			type="text"
+			class="global-input email-input"
+			placeholder="输入密码"
+			placeholder-class="input-placeholder"
+			style="margin-top: 30px"
+			maxlength="30"
+			v-model="password"
+		/>
+		<button class="email-send-btn" hover-class="hover-first-main-button" bindtap="verifyEmail" @click="register">加入</button>
+		<navigator class="nav-log-account blue-font" url="/pages/login/login">已经注册?</navigator>
 		<view class="gray-font bottom">
 			<text>注册账号即表示您同意</text>
 			<navigator class="blue-font navigator" target="" url="" hover-class="navigator-hover" open-type="navigate">《使用协议》</navigator>
@@ -16,16 +32,45 @@
 </template>
 
 <script>
+import { register, login } from '@/utils';
 export default {
 	data() {
 		return {
-			email: ""
+			email: '',
+			nickname: '',
+			password: ''
 		};
+	},
+	methods: {
+		async register() {
+			// await register(this.email, this.nickname, this.password);
+			setTimeout(async () => {
+				const data = await login(this.email, this.password);
+				console.log(data);
+				uni.setStorageSync('token', data.data.token);
+				uni.setStorageSync('user', {
+					nickname: this.nickname
+				});
+				uni.navigateTo({
+					url: '/pages/index/index'
+				});
+			}, 1000);
+		}
 	}
 };
 </script>
 
 <style lang="scss">
+.title {
+	padding: calc(var(--status-bar-height)+100px) 50rpx 0 70rpx;
+	text-align: center;
+	font-size: 60rpx;
+}
+.email-send-btn {
+	margin-top: 30px;
+	width: 600rpx;
+	background-color: #4b9f79;
+}
 .blue-font {
 	line-height: 24rpx;
 	font-family: Source Han Sans CN;
@@ -76,7 +121,7 @@ input {
 }
 
 .bottom {
-	position: fixed;
+	position: absolute;
 	bottom: 82rpx;
 	font-size: 28rpx;
 	text-align: center;
@@ -89,6 +134,7 @@ input {
 	float: right;
 	overflow: hidden;
 	margin-right: 64rpx;
+	margin-top: 20px;
 }
 
 .remind {

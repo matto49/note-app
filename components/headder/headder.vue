@@ -3,7 +3,7 @@
 		<view class="top-view status"></view>
 		<view class="titles">
 			<view class="titleLeftButton" @click="showMore"><image class="button" src="/static/more.svg"></image></view>
-			<view class="titleText">二零二二年 五月</view>
+			<view class="titleText">二零二二年 七月</view>
 			<view class="titleRightButton" @click="gotoWritePage"><image class="button" src="/static/write.svg"></image></view>
 		</view>
 	</view>

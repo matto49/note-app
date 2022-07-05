@@ -72,3 +72,6 @@ export function formatMiniute(date) {
 	let dateStr = getStandardDate(date).split(' ')[1].slice(0,5)
 	return dateStr
 }
+export function getDay(date) {
+	return getStandardDate(date).split(' ')[0]
+}

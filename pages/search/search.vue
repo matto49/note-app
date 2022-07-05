@@ -1,20 +1,30 @@
 <template>
 	<view class="container">
 		<view class="search-container"><uni-search-bar placeholder="请输入关键字" @confirm="search" radius="30"></uni-search-bar></view>
-		<view class="default">
+		<view class="default" v-if="defaultContent">
 			<image class="image" src="/static/search-empty.svg"></image>
 			<view class="text"><text>空空如也</text></view>
 		</view>
+		<view><articles :articles="articles"></articles></view>
 	</view>
 </template>
 
 <script>
+import { openDatabase, closeDatabase, getArticlesByWords, modifyData } from '@/utils';
 export default {
 	data() {
-		return {};
+		return {
+			defaultContent: false,
+			articles: []
+		};
 	},
 	methods: {
-		search() {}
+		async search(e) {
+			const value = e.value;
+			await openDatabase();
+			this.articles = await getArticlesByWords(value);
+			await closeDatabase();
+		}
 	}
 };
 </script>
@@ -31,7 +41,7 @@ export default {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
-		.image{
+		.image {
 			width: 300rpx;
 			height: 300rpx;
 		}

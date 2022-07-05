@@ -1,100 +1,103 @@
 <template>
 	<view class="container">
 		<uni-calendar class="uni-calendar--hook" :selected="info.selected" :showMonth="false" @change="change" @monthSwitch="monthSwitch" />
+		<view class="articles"><articles :articles="articles"></articles></view>
 	</view>
 </template>
 
 <script>
-	function getDate(date, AddDayCount = 0) {
-		if (!date) {
-			date = new Date()
-		}
-		if (typeof date !== 'object') {
-			date = date.replace(/-/g, '/')
-		}
-		const dd = new Date(date)
+function getDate(date, AddDayCount = 0) {
+	if (!date) {
+		date = new Date();
+	}
+	if (typeof date !== 'object') {
+		date = date.replace(/-/g, '/');
+	}
+	const dd = new Date(date);
 
-		dd.setDate(dd.getDate() + AddDayCount) // 获取AddDayCount天后的日期
+	dd.setDate(dd.getDate() + AddDayCount); // 获取AddDayCount天后的日期
 
-		const y = dd.getFullYear()
-		const m = dd.getMonth() + 1 < 10 ? '0' + (dd.getMonth() + 1) : dd.getMonth() + 1 // 获取当前月份的日期，不足10补0
-		const d = dd.getDate() < 10 ? '0' + dd.getDate() : dd.getDate() // 获取当前几号，不足10补0
+	const y = dd.getFullYear();
+	const m = dd.getMonth() + 1 < 10 ? '0' + (dd.getMonth() + 1) : dd.getMonth() + 1; // 获取当前月份的日期，不足10补0
+	const d = dd.getDate() < 10 ? '0' + dd.getDate() : dd.getDate(); // 获取当前几号，不足10补0
+	return {
+		fullDate: y + '-' + m + '-' + d,
+		year: y,
+		month: m,
+		date: d,
+		day: dd.getDay()
+	};
+}
+function getTimeSpan(day) {
+	// day: 2022-07-05
+	let day1 = day + ' 00:00:00';
+	let num = parseInt(day[9]) + 1;
+	let day2 = day.slice(0, 9) + num + ' 00:00:00';
+	return [day1, day2];
+}
+import { openDatabase, closeDatabase, getArticlesBydate,modifyData,getArticles,getDay } from '@/utils';
+export default {
+	components: {},
+	data() {
 		return {
-			fullDate: y + '-' + m + '-' + d,
-			year: y,
-			month: m,
-			date: d,
-			day: dd.getDay()
-		}
-	}
-	export default {
-		components: {},
-		data() {
-			return {
-				showCalendar: false,
-				info: {
-					lunar: true,
-					range: true,
-					insert: false,
-					selected: []
-				}
-			}
-		},
-		onReady() {
-			this.$nextTick(() => {
-				this.showCalendar = true
+			showCalendar: false,
+			info: {
+				lunar: true,
+				range: true,
+				insert: false,
+				selected: []
+			},
+			articles: []
+		};
+	},
+	async onShow() {
+		await openDatabase();
+		let articles = modifyData(await getArticles());
+		console.log(articles)
+		await closeDatabase();
+		articles.forEach((item)=> {
+			this.info.selected.push({
+				date: getDate(new Date(item.createAt)).fullDate,
 			})
-			// TODO 模拟请求异步同步数据
-			setTimeout(() => {
-				this.info.date = getDate(new Date(),-30).fullDate
-				this.info.startDate = getDate(new Date(),-60).fullDate
-				this.info.endDate =  getDate(new Date(),30).fullDate
-				this.info.selected = [{
-						date: getDate(new Date(),-3).fullDate,
-						info: '打卡'
-					},
-					{
-						date: getDate(new Date(),-2).fullDate,
-						info: '签到',
-						data: {
-							custom: '自定义信息',
-							name: '自定义消息头'
-						}
-					},
-					{
-						date: getDate(new Date(),-1).fullDate,
-						info: '已打卡'
-					}
-				]
-			}, 2000)
+		})
+		let daySpan = getTimeSpan(getDay(new Date()));
+		await openDatabase();
+		this.articles = modifyData(await getArticlesBydate(daySpan[0], daySpan[1]));
+		await closeDatabase();
+	},
+	onReady() {
+		this.$nextTick(() => {
+			this.showCalendar = true;
+		});
+	},
+	methods: {
+		open() {
+			this.$refs.calendar.open();
 		},
-		methods: {
-			open() {
-				this.$refs.calendar.open()
-			},
-			close(){
-				console.log('弹窗关闭');
-			},
-			change(e) {
-				console.log('change 返回:', e)
-				// 模拟动态打卡
-				if (this.info.selected.length > 5) return
-				this.info.selected.push({
-					date: e.fulldate,
-					info: '打卡'
-				})
-			},
-			confirm(e) {
-				console.log('confirm 返回:', e)
-			},
-			monthSwitch(e) {
-				console.log('monthSwitchs 返回:', e)
-			}
+		close() {
+			console.log('弹窗关闭');
+		},
+		async change(e) {
+			let daySpan = getTimeSpan(e.fulldate);
+			await openDatabase();
+			this.articles = modifyData(await getArticlesBydate(daySpan[0], daySpan[1]));
+			await closeDatabase();
+		},
+		confirm(e) {
+			console.log('confirm 返回:', e);
+		},
+		monthSwitch(e) {
+			console.log('monthSwitchs 返回:', e);
 		}
 	}
+};
 </script>
 
 <style lang="scss">
 .container {
-	padding-top: var(--status-bar-height);}
+	padding-top: var(--status-bar-height);
+	.articles {
+		bottom: 20px;
+	}
+}
 </style>

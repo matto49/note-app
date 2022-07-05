@@ -17,7 +17,6 @@ export default {
 	},
 	methods: {
 		navigatorToLog() {
-			console.log(123)
 			uni.navigateTo({
 				url: '/pages/register/register'
 			})

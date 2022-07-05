@@ -44,7 +44,8 @@ export function addArticle(content, date, text, tags = "未分类") {
 	createArticlesTable();
 	plus.sqlite.executeSql({
 		name: 'articles',
-		sql: 'insert into article (createAt,content,text,tags) values ("' + date + '","' + content + '","' + text +
+		sql: 'insert into article (createAt,content,text,tags) values ("' + date + '","' + content + '","' +
+			text +
 			'","' + tags +
 			'")',
 		success(e) {
@@ -55,10 +56,23 @@ export function addArticle(content, date, text, tags = "未分类") {
 		}
 	})
 }
-export function editArticle(content,text,tags = "未分类") {
+export function deleteArticle(id) {
 	plus.sqlite.executeSql({
 		name: 'articles',
-		sql: 'update article set content = "'+content+'", text = "'+text+'",tags = "'+tags+'"',
+		sql: 'delete from article where id = "' + id + '"',
+		success(e) {
+			console.log("数据删除成功")
+		},
+		fail(e) {
+			console.log("数据删除失败", e)
+		}
+	})
+}
+export function editArticle(content, text, tags = "未分类", id) {
+	plus.sqlite.executeSql({
+		name: 'articles',
+		sql: 'update article set content = "' + content + '", text = "' + text + '",tags = "' + tags +
+			'" where id = "' + id + '"',
 		success(e) {
 			console.log("数据更改成功")
 		},
@@ -69,12 +83,53 @@ export function editArticle(content,text,tags = "未分类") {
 }
 export async function getArticles() {
 	let data;
+	createArticlesTable()
 	await new Promise((resolve, reject) => {
 		plus.sqlite.selectSql({
 			name: 'articles',
 			sql: 'select id,createAt,content,text,tags from article order by id desc',
 			success(e) {
 				data = e;
+				resolve(e)
+			},
+			fail(e) {
+				console.log("获取笔记失败", e)
+				reject(e)
+			}
+		})
+	})
+	return data;
+}
+export async function getArticlesBydate(date1, date2) {
+	let data;
+	await new Promise((resolve, reject) => {
+		plus.sqlite.selectSql({
+			name: 'articles',
+			sql: 'select id,createAt,content,text,tags from article where "' + date1 +
+				'" < createAt and "' + date2 + '"> createAt order by id desc',
+			success(e) {
+				data = e;
+				console.log(e)
+				resolve(e)
+			},
+			fail(e) {
+				console.log("获取笔记失败", e)
+				reject(e)
+			}
+		})
+	})
+	return data;
+}
+export async function getArticlesByWords(keyWords) {
+	let data;
+	await new Promise((resolve, reject) => {
+		plus.sqlite.selectSql({
+			name: 'articles',
+			sql: 'select id,createAt,content,text,tags from article where text like "%' + keyWords +
+				'%" order by id desc',
+			success(e) {
+				data = e;
+				console.log(e)
 				resolve(e)
 			},
 			fail(e) {

@@ -20,7 +20,10 @@
 
 <script>
 const chineseNum = ['一', '二', '三', '四', '五', '六', '七', '八', '九'];
-import { openDatabase, isOpen, closeDatabase, getArticles,modifyData } from '@/utils';
+import { openDatabase, isOpen, closeDatabase, getArticles, modifyData, getNoteList, addArticle } from '@/utils';
+let token;
+let localData;
+let serverData;
 export default {
 	data() {
 		return {
@@ -40,17 +43,35 @@ export default {
 		this.date = date.getDate();
 		this.month = chineseNum[date.getMonth()];
 		this.day = chineseNum[date.getDay() - 1];
-
 	},
 	async onShow() {
+		if (uni.getStorageSync('token')) {
+			token = uni.getStorageSync('token');
+		}
+		// uni.clearStorageSync("token")
+		// console.log(uni.getStorageSync('token'))
 		await openDatabase();
-		const data = await getArticles();
+		// plus.sqlite.executeSql({
+		// 	name: 'articles',
+		// 	sql: 'drop table article',
+		// });
+		localData = await getArticles();
+		if (localData.length === 0) {
+			serverData = (await getNoteList(99, 1, token)).data.notes;
+			console.log(serverData);
+			this.articles = modifyData(serverData);
+			serverData.reverse().forEach(async item => {
+				await addArticle(item.content, item.createAt, item.text, item.tags);
+			});
+		} else {
+			this.articles = modifyData(localData);
+		}
 		await closeDatabase();
-		this.articles = modifyData(data);
-		console.log(1123)
-		uni.navigateTo({
-			url:"/pages/enter/enter"
-		})
+		if (!uni.getStorageSync('token')) {
+			uni.navigateTo({
+				url: '/pages/enter/enter'
+			});
+		}
 	}
 };
 </script>

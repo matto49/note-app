@@ -13,15 +13,17 @@
 </template>
 <script>
 import jinEdit from '../../components/jin-edit/jin-edit.vue';
-import { openDatabase, isOpen, closeDatabase, addArticle, editArticle,getStandardDate,addNote } from '@/utils';
+import { openDatabase, isOpen, closeDatabase, addArticle, editArticle,getStandardDate,addNote ,editNote} from '@/utils';
 let isEdit = false;
+let token = uni.getStorageSync("token")
 export default {
 	data() {
 		return {
 			html: '',
 			date: '',
 			editData: {},
-			tags: ["未分类"]
+			tags: ["未分类"],
+			id: 0
 		};
 	},
 	components: {
@@ -30,17 +32,17 @@ export default {
 	methods: {
 		// 点击发布
 		async editOk(e) {
+			console.log(e)
 			await openDatabase();
 			if(!isEdit) {
 				this.tags.forEach(async (item) => {
 					await addArticle(e.html, this.date, e.text,item);
-					await addNote(this.date,e.text,e.html,item);
+					await addNote(this.date,e.text,e.html,item,token);
 				})
 			} else {
-				this.tags.forEach((item) => {
-					console.log(113)
-					// await editArticle(e.html,e.text,item)
-					// await addNote(this.date,e.text,e.html,item)
+				this.tags.forEach(async (item) => {
+					await editArticle(e.html,e.text,item,this.id)
+					await editNote(this.date,e.text,e.html,item,token,this.id)
 				})
 			}
 			await closeDatabase();
@@ -49,7 +51,7 @@ export default {
 		returnToIndex() {
 			uni.navigateTo({
 				url:'/pages/index/index'
-			})();
+			});
 		}
 	},
 	onLoad(e) {
@@ -57,6 +59,7 @@ export default {
 			const data = JSON.parse(e.data);
 			this.editData = data;
 			this.date = getStandardDate(new Date(data.createAt));
+			this.id = data.id;
 			isEdit = true;
 		} else {
 			this.date = getStandardDate(new Date());

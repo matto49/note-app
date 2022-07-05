@@ -39,8 +39,6 @@
 			this.article = JSON.parse(e.article);
 			this.year = this.article.month.split(" ")[0];
 			this.month = this.article.month.split(" ")[1];
-			console.log(this.year)
-			console.log(this.article)
 		},
 		methods: {
 			edit() {
